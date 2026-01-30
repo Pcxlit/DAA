@@ -1,0 +1,199 @@
+Q1 #include <iostream>
+using namespace std;
+int search(int arr[], int size, int key)
+{
+    int start = 0;
+    int end = size - 1;
+    int mid = start + (end - start) / 2;
+    while (start <= end)
+    {
+        if (arr[mid] == key)
+        {
+            return mid;
+        }
+        if (arr[mid] > key)
+        {
+            end = mid - 1;
+        }
+        if (arr[mid] < key)
+        {
+            start = mid + 1;
+        }
+
+        mid = start + (end - start) / 2;
+    }
+    return -1;
+}
+int main()
+{
+    int even[] = {3, 5, 7, 8, 10, 43};
+    int odd[] = {2, 5, 8, 12, 16, 23, 38, 56, 72, 91};
+    int index = search(odd, 10, 23);
+    cout << index;
+    return 0;
+}
+
+
+Q2#include <iostream>
+using namespace std;
+void merge(int *arr, int s, int e)
+{                                                                                                      // time complexity o(logn*n)  space o(n)
+    int mid = (s + e) / 2;
+
+    int len1 = mid - s + 1;
+    int len2 = e - mid;
+
+    int *arr1 = new int[len1]; // make two arrays
+    int *arr2 = new int[len2];
+
+    int k = s;
+    for (int i = 0; i < len1; i++)
+    { 
+        arr1[i] = arr[k++];
+    }
+
+    k = mid + 1;
+    for (int i = 0; i < len2; i++)
+    {
+        arr2[i] = arr[k++];
+    }
+
+    int index1 = 0;
+    int index2 = 0;
+    k = s;
+
+    while (index1 < len1 && index2 < len2)
+    {
+        if (arr1[index1] <= arr2[index2])
+        {
+            arr[k] = arr1[index1];
+            k++;
+            index1++;
+        }
+        else if (arr1[index1] > arr2[index2])
+        {
+            arr[k] = arr2[index2];
+            k++;
+            index2++;
+        }
+    }
+    while (index1 < len1)
+    {
+        arr[k] = arr1[index1];
+        k++;
+        index1++;
+    }
+    while (index2 < len2)
+    {
+        arr[k] = arr2[index2];
+        k++;
+        index2++;
+    }
+    delete[] arr1;
+    delete[] arr2;
+}
+
+void mergesort(int *arr, int s, int e)
+{
+    if (s >= e)
+    {
+        return;
+    }
+    int mid = (s + e) / 2;
+    mergesort(arr, s, mid);     
+    mergesort(arr, mid + 1, e);
+    merge(arr, s, e);
+}
+int main()
+{
+    int arr[] = {12, 11, 13, 5, 6, 7};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    mergesort(arr, 0, n - 1);
+    for (int i = 0; i < n; i++)
+        cout << arr[i] << " ";
+    int arr2[] = {38, 27, 43, 3, 9, 82, 10};
+    mergesort(arr2,0,6);
+}
+
+Q3#include <iostream>
+using namespace std;
+int partition(int *arr, int s, int e)
+{
+    int pivot = arr[s];
+    int count = 0;
+    for (int i = s + 1; i <= e; i++) 
+    {
+        if (pivot >= arr[i]) 
+        {
+            count++;
+        }
+    }
+    int pvindex = s + count;
+    swap(arr[s], arr[pvindex]);
+    int i = s, j = e;
+    while (i < pvindex && j > pvindex)
+    {
+        while (arr[i] < arr[pvindex]) // stops at incorrect element
+        {
+            i++;
+        }
+        while (arr[j] > arr[pvindex])
+        {
+            j--;
+        }
+        if (i < pvindex && j > pvindex)
+        {
+            swap(arr[i], arr[j]);
+            i++;
+            j--;
+        }
+    }
+    return pvindex;
+}
+
+void quicksort(int *arr, int s, int e)
+{
+    if (s >= e)
+    {
+        return;
+    }
+    int pvindex = partition(arr, s, e);
+    quicksort(arr, s, pvindex - 1);
+    quicksort(arr, pvindex + 1, e);
+    return;
+}
+int main()
+{
+    int arr[] = { 4, 2, 6, 9, 2 };
+    int n = sizeof(arr) / sizeof(arr[0]);
+    quicksort(arr, 0, n - 1);
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+}
+Q4
+#include <iostream>
+using namespace std;
+
+int maxsubarr(int arr[], int n) {
+    int currsum = arr[0];
+    int maxsum = arr[0];
+
+    for (int i = 1; i < n; i++) {
+        currentsum = max(arr[i], currsum + arr[i]);
+        maxsum = max(maxsum, currsum);
+    }
+
+    return maxSum;
+}
+
+int main() {
+    int arr[] = {-2, -5, 6, -2, -3, 1, 5, -6};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    cout << "max sum is" << maxsubarr(arr, n);
+
+    return 0;
+}
+
